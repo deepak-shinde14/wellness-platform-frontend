@@ -59,7 +59,7 @@ export const admin = {
     createContent: (data) => API.post('/admin/content', data),
     updateContent: (id, data) => API.put(`/admin/content/${id}`, data),
     deleteContent: (id) => API.delete(`/admin/content/${id}`),
-    getAllConsultations: (params) => API.get('/admin/all', { params }),
+    getAllConsultations: (params) => API.get('/consults/admin/all', { params }),
 };
 
 export default {
