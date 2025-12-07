@@ -2,6 +2,7 @@
 import React, { createContext, useState, useEffect } from 'react';
 import API from '../api/axiosInstance';
 import { getUser, logout as apiLogout } from '../api/auth';
+import { setCookie, getCookie, eraseCookie } from '../utils/cookies';
 
 export const AuthContext = createContext();
 
@@ -12,7 +13,7 @@ export const AuthProvider = ({ children }) => {
 
     useEffect(() => {
         const initAuth = async () => {
-            const token = localStorage.getItem('token');
+            const token = getCookie('token');
             
             if (!token) {
                 setLoading(false);
@@ -31,7 +32,7 @@ export const AuthProvider = ({ children }) => {
                 }
             } catch (error) {
                 console.error('Auth initialization error:', error);
-                localStorage.removeItem('token');
+                eraseCookie('token');
             } finally {
                 setLoading(false);
             }
@@ -48,12 +49,12 @@ export const AuthProvider = ({ children }) => {
             const { data } = response;
             if (data.success && data.data) {
                 const { token, user } = data.data;
-                localStorage.setItem('token', token);
+                setCookie('token', token, 7);
                 setUser(user);
                 return { success: true, user };
             } else if (data.user) {
                 const { token, user } = data;
-                localStorage.setItem('token', token);
+                setCookie('token', token, 7);
                 setUser(user);
                 return { success: true, user };
             } else {
@@ -74,12 +75,12 @@ export const AuthProvider = ({ children }) => {
             const { data } = response;
             if (data.success && data.data) {
                 const { token, user } = data.data;
-                localStorage.setItem('token', token);
+                setCookie('token', token, 7);
                 setUser(user);
                 return { success: true, user };
             } else if (data.user) {
                 const { token, user } = data;
-                localStorage.setItem('token', token);
+                setCookie('token', token, 7);
                 setUser(user);
                 return { success: true, user };
             } else {
@@ -98,7 +99,7 @@ export const AuthProvider = ({ children }) => {
         } catch (error) {
             console.error('Logout error:', error);
         } finally {
-            localStorage.removeItem('token');
+            eraseCookie('token');
             setUser(null);
         }
     };

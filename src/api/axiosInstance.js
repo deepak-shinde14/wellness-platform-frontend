@@ -1,5 +1,6 @@
 // frontend/src/api/axiosInstance.js
 import axios from 'axios';
+import { getCookie, eraseCookie } from '../utils/cookies';
 
 const API = axios.create({
     baseURL: process.env.REACT_APP_API_URL,
@@ -11,7 +12,7 @@ const API = axios.create({
 // Request interceptor to add token
 API.interceptors.request.use(
     (config) => {
-        const token = localStorage.getItem('token');
+        const token = getCookie('token');
         if (token) {
             config.headers.Authorization = `Bearer ${token}`;
         }
@@ -28,7 +29,7 @@ API.interceptors.response.use(
     (error) => {
         if (error.response?.status === 401) {
             // Token expired or invalid
-            localStorage.removeItem('token');
+            eraseCookie('token');
             window.location.href = '/login';
         }
         
